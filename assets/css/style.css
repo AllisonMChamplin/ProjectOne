@@ -1,0 +1,242 @@
+html {
+
+}
+
+body {
+    font-family: 'Open Sans', sans-serif;
+    font-Size: 15px;
+    /* background-image: url("../images/tiny-squares.png"); */
+    background-image: url("../images/darkdenim3.png");
+    height: 100%;
+}
+
+div {
+    /* border: 1px solid #666; */
+    font-family: 'Open Sans', sans-serif;
+}
+
+#food-search-results {
+    min-height: 200px;
+}
+
+.wrapper {
+    height: 100%;
+    background: #fff;
+    border-radius: 10px;
+    padding-top: 50px;
+}
+
+.search-wrapper {
+    margin: 10px 0;
+    display: block;
+    width: 100%;
+    text-align: left;
+    border: 1px solid #cecece;
+    padding: 8px;
+}
+
+
+.container {
+    height: 100%;
+}
+
+h1, h2, h3, h4, h5 {
+    font-family: 'Nunito', sans-serif;
+}
+
+#title {
+    Font-Size: 38px;
+    padding: 0 0 16px 0;
+    margin: 30px 0 0 0;
+    display: inline-block;
+    color: #fff;
+    width: 100%;
+}
+
+#title a, #title a:visited {
+    color:#fff;
+}
+
+#title a:hover {
+    color: yellow;
+    text-decoration: none;
+}
+
+
+#run-search {
+    border: 1px solid #ffffff;
+    border-radius: 3px;
+    background: #0a655b;
+    color: #fff;
+    font-weight: bolder;
+    padding: 8px 12px;
+    margin-left: 5px;
+}
+
+#run-search:hover {
+    color: #0a655b;
+}
+
+.page-header {
+    /* background-color:#3f3d64; */
+    background-color: #000;
+    color: #fff;
+    padding-top: 12px;
+    margin-bottom: 4px;
+    border-bottom: 8px solid #333;
+    border-top: 14px solid #333;
+}
+
+#search {
+    text-align: right;
+}
+
+label {
+    margin-bottom: 8px;
+    color: #333;
+}
+
+.topic-image {
+    /* border: 1px solid red; */
+    width: 50%;
+    max-width: 50%;
+    float: left;
+    text-align: center;
+    margin-bottom: 20px;
+    margin-top: 40px;
+    height: 226px;
+}
+
+.meta {
+    margin: 4px 0;
+}
+
+#tags {
+
+    padding-bottom: 4px;
+    /* text-align: center; */
+}
+
+form {
+    margin-bottom: 4px;
+    margin-top: 6px;
+    background: #ccc;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+#show {
+    width: 300px;
+    float: right;
+    text-align: right;
+    margin: 34px 0 0;
+}
+
+#add {
+    background: #3f3d64;
+    color: #fff;
+    font-weight: bold;
+}
+
+.jumbotron {
+    background: #0a655b;
+    color: #fff;    
+    margin-bottom: 0;
+}
+
+.jumbotron h2 {
+    font-size: 2em;
+    margin: 0 0 20px 0;
+}
+
+
+.food-title {
+    background: rgb(235, 235, 235);
+    border: 1px solid #ccc;
+    display: block;
+    clear: both;
+    padding: 20px;
+    margin: 40px 20px 0;
+    border-radius: 4px;
+}
+
+#search-term {
+    border: 1px solid #ccc;
+    padding: 5px 8px;
+    /* margin-bottom: 5px; */
+}
+
+footer {
+    width: 100%;
+    background: #ccc;
+    padding: 10px;
+    margin-top: 40px;
+    color:#fff;
+    line-height: 1.3em;
+}
+
+footer a, footer a:visited {
+    color:#fff;
+    text-decoration: none;
+}
+
+footer a:hover {
+    color:#fff;
+    text-decoration: underline;
+}
+
+strong {
+    font-weight: bold;
+}
+
+p {
+    line-height: 1.4em;
+    font-size: 1.15em;
+}
+
+.white {
+    color:#fff;
+}
+
+.wrap {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background: #fff;
+    margin-bottom: 80px;
+    padding-bottom: 60px;
+}
+
+#results-div {
+    margin: 20px 0;
+    padding: 10px 0 20px 10px;
+    font-size: 1.4em;
+    border-bottom: 1px solid #ccc;
+}
+
+
+.data-heading-col {
+    font-weight: bold;
+    width: 20%;
+    text-align: right;
+    padding: 4px 10px;
+}
+
+.data-col {
+    min-width: 80%;  
+    width: 80%;
+    max-width: 80%; 
+    padding: 4px 10px;
+    line-height: 1.3em; 
+}
+
+td {
+    border: 1px solid #ccc;
+}
+
+table {
+    width: 100%;
+}
+
+tr {
+    width: 100%;
+}
