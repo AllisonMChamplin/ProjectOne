@@ -53,7 +53,16 @@ $(document).ready(function () {
         var label = $('<div class="label">');
         var labelWrapper = $('<div class="label-wrapper clearfix">');
         var mainHeadingDiv = $('<div class="label-header">Nutrition Facts</div>');
-        var servingsDiv = $('<div class="servings clearfix"><div class="nutrient">Serving Size: </div><div class="nutrient-value">100g</div></div>');
+        var servingsInfoDiv = $('<div>');
+        var servingsInfoButton = $('<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">Learn about servings!</button>');
+        servingsInfoDiv.append(servingsInfoButton);
+        var servingsDiv = $('<div class="servings clearfix"></div>');
+        var servingsNutrientDiv = $('<div class="nutrient">Serving Size: </div>');
+        var servingsValueDiv = $('<div class="nutrient-value">100g </div>');
+        servingsDiv.append(servingsNutrientDiv, servingsValueDiv, servingsInfoDiv);
+
+// <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">Launch demo modal</button>
+
         var caloriesDiv = $('<div class="calories clearfix"><div class="nutrient">Calories: </div>' + '<div class="nutrient-value"> ' + data.nutrients[2].value +  data.nutrients[4].unit + '</div></div>');
         var proteinDiv = $('<div class="protein clearfix"><div class="nutrient">Protein: </div>' + '<div class="nutrient-value"> ' + data.nutrients[4].value + data.nutrients[4].unit + '</div></div>');
         var fatDiv = $('<div class="fat clearfix"><div class="nutrient">Fat: </div>' + '<div class="nutrient-value"> ' + data.nutrients[5].value + data.nutrients[5].unit + '</div></div>');

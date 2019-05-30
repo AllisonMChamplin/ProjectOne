@@ -351,3 +351,20 @@ tr {
     padding: 10px 15px;
     border-bottom: 1px solid #000;
 }
+
+.modal-body {
+    font-size: 1.5em;
+}
+
+ul {
+    list-style-type: disc;
+    margin: 5px 0 20px 40px;
+}
+
+li {
+    margin: 10px 0;
+}
+
+.servings button {
+    margin: 10px 0;
+}
