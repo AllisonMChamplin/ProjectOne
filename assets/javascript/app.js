@@ -1,85 +1,25 @@
 $(document).ready(function () {
 
-    // <!-- https://api.nal.usda.gov/ndb/search/?format=json&q=butter&sort=n&max=25&offset=0&api_key=DEMO_KEY -->
-
-    var searchList = [];
-
-    // Click handler for the Search Button
-    $("#run-search").on("click", function (event) {
-        console.log("clicked search");
-        event.preventDefault();
-        $('#warn').empty();
-        userSearchTerm = $("#search-term").val().trim();
-        userSearchTermSpacer = encodeURIComponent(userSearchTerm);
-        foodSearchAjax(userSearchTermSpacer);
+    $('#food-img-click').on('click', 'div', function (event) {
+        var NDBOID = $(this).attr("value");
+        console.log("*Click!* Food button clicked.", NDBOID);
+        // var resultsDiv = $('#nutrition-view');
+        var data = nutritionDetailAjax(NDBOID);
+        $('#nutrition-view').empty();
+        $('#nutrition-view').html('<img src="./assets/images/8.gif">')
+        // resultsDiv.empty();
     });
-
-
-
-    // AJAX request to the USDA Search
-    var foodSearchAjax = function (input) {
-        if (!input) {
-            console.log("false");
-            return false;
-        }
-        searchList.push(input);
-        console.log("searchList: ", searchList);
-        var APIKEY = "MTThsOXeyC4yDoAe048samFSx66c0bbwi0HO6m4G";
-        var queryURL = "https://api.nal.usda.gov/ndb/search/?format=json&q=" + input + "&max=5&offset=0" + "&api_key=" + APIKEY;
-        console.log("foodSearchAjax queryURL: ", queryURL);
-        // AJAX request with the queryURL
-        $.ajax({
-            url: queryURL,
-            method: "GET"
-        })
-            .then(function (response) {
-                // storing the data from the AJAX request in the results variable
-                var results = response;
-                console.log("foodSearchAjax results:", results);
-                displayFoodSearchResults(results);
-            });
-    };
-
-    var displayFoodSearchResults = function (x) {
-        $('.jumbowrap').hide();        
-        var displayDiv = $('#food-search-results');
-        displayDiv.empty();
-        var resultsInfo = $('<div>');
-        resultsInfo.attr("id", "results-div");
-        resultsInfo.html("<span>Results 1 - 5</span>");
-        displayDiv.append(resultsInfo);
-        for (var i = 0; i < x.list.item.length; i++) {
-            var foodName = x.list.item[i].name;
-            var foodId = x.list.item[i].ndbno;
-            var button = $('<button class="search-wrapper">');
-            button.text(foodName);
-            button.attr("value", foodId);
-            var buttonParentDiv = $("<div>");
-            buttonParentDiv.attr("data-id", foodId);
-            buttonParentDiv.append(button);
-            displayDiv.append(buttonParentDiv);
-        }
-    };
-
-    $('#food-search-results').on('click', 'button', function (event) {
-        console.log("button clicked");
-        var buttonParentDiv = $(this).parent();
-        var foodNumber = $(this).attr("value");
-        foodReportAjax(foodNumber, buttonParentDiv);
-    });
-
-
 
     // AJAX request to the USDA Report
-    var foodReportAjax = function (foodNumber, buttonParentDiv) {
-        if (!foodNumber) {
-            console.log("false");
+    var nutritionDetailAjax = function (NDBOID) {
+        if (!NDBOID) {
+            console.log("No NDBOID! Return false.");
             return false;
         }
         // https://api.nal.usda.gov/ndb/V2/reports?ndbno=01009&ndbno=01009&ndbno=45202763&ndbno=35193&type=b&format=json&api_key=DEMO_KEY
         var APIKEY = "MTThsOXeyC4yDoAe048samFSx66c0bbwi0HO6m4G";
-        var queryURL = "https://api.nal.usda.gov/ndb/V2/reports?ndbno=" + foodNumber + "&format=json&q=" + "&max=5&offset=0" + "&api_key=" + APIKEY;
-        console.log("foodReportAjax queryURL: ", queryURL);
+        var queryURL = "https://api.nal.usda.gov/ndb/V2/reports?ndbno=" + NDBOID + "&format=json&max=5&offset=0&type=f&api_key=" + APIKEY;
+        console.log("nutritionDetailAjax queryURL", queryURL);
         // AJAX request with the queryURL
         $.ajax({
             url: queryURL,
@@ -88,53 +28,70 @@ $(document).ready(function () {
             .then(function (response) {
                 // storing the data from the AJAX request in the results variable
                 var results = response;
-                console.log("foodReportAjax results:", results);
-                displayFoodReportResults(results, foodNumber, buttonParentDiv);
+                console.log("nutritionDetailAjax Results:", results);
+                displayNutritionResults(results, NDBOID);
             });
     };
 
-    var displayFoodReportResults = function (results, foodNumber, buttonParentDiv) {
-        console.log("here");
-        // var displayDiv = $('#food-report-results');
-        var reportWrapTable = $("<table class='report-wrapper'></table>");
-        reportWrapTable.attr("id", foodNumber);
-
-        var foodId = results.foods[0].food.desc.ndbno;
-        var foodIdRow = $('<tr>');
-        foodIdRow.html("<td class='data-heading-col'>Title:</td>" + "<td class='data-col'>" + foodId + "</td></tr>");
-        reportWrapTable.append(foodIdRow);
-        
-        var foodName = results.foods[0].food.ing.desc;
-        var foodNameRow = $('<tr>');
-        foodNameRow.html("<td class='data-heading-col'>Name:</td>" + "<td class='data-col'>" + foodName + "</td></tr></table>");        
-        reportWrapTable.append(foodNameRow);
-
-        var nutrientsRows = function () { 
-            console.log("hi loop", results.foods[0].food.nutrients.length);  
-            console.log("hi name: ", results.foods[0].food.nutrients[0].name);         
-            for (var i = 0; i < results.foods[0].food.nutrients.length; i++) {
-                console.log("loop#: ", i);
-                var title = results.foods[0].food.nutrients[i].name;
-                var value = results.foods[0].food.nutrients[i].value;
-                var nutrientRow = $('<tr>');
-                nutrientRow.html("<td class='data-heading-col'>" + title + ":</td>" + "<td class='data-col'>" + value + "</td></tr>");
-                reportWrapTable.append(nutrientRow);
-            }
-        }
-        nutrientsRows();
-        buttonParentDiv.append(reportWrapTable);
+    // Build the nutrition detail view
+    var displayNutritionResults = function (results, NDBOID) {
+        var photoURL = photoDisplay(NDBOID);
+        var label = nutritionLabel(results, NDBOID);
+        var nutritionViewDiv = $('#nutrition-view');
+        nutritionViewDiv.empty();
+        var foodName = results.foods[0].food.desc.name;
+        var foodNameHeading = $('<h1>');
+        foodNameHeading.text(foodName);
+        var nutritionRowTop = $('<div class="row"><div class="col top-left">' + '<img src="' + photoURL + '">' + '</div><div class="col top-right">' + label + '</div></div>');
+        var nutritionRowBottom = $('<div class="row"><div class="col bottom-left">MyPlate<br>*** Add food group name here from API, and then figure out how to add myPlate group ***</div><div class="col bottom-right">Macros pie chart</div></div>')
+        nutritionViewDiv.append(foodNameHeading, nutritionRowTop, nutritionRowBottom);
     };
 
+    // Build the nutrition label
+    var nutritionLabel = function (results, NDBOID) {
+        var data = results.foods[0].food;
+        var label = $('<div class="label">');
+        var labelWrapper = $('<div class="label-wrapper clearfix">');
+        var mainHeadingDiv = $('<div class="label-header">Nutrition Facts</div>');
+        var servingsDiv = $('<div class="servings clearfix"><div class="nutrient">Serving Size: </div><div class="nutrient-value">100g</div></div>');
+        var caloriesDiv = $('<div class="calories clearfix"><div class="nutrient">Calories: </div>' + '<div class="nutrient-value"> ' + data.nutrients[2].value +  data.nutrients[4].unit + '</div></div>');
+        var proteinDiv = $('<div class="protein clearfix"><div class="nutrient">Protein: </div>' + '<div class="nutrient-value"> ' + data.nutrients[4].value + data.nutrients[4].unit + '</div></div>');
+        var fatDiv = $('<div class="fat clearfix"><div class="nutrient">Fat: </div>' + '<div class="nutrient-value"> ' + data.nutrients[5].value + data.nutrients[5].unit + '</div></div>');
+        var carbDiv = $('<div class="carbs clearfix"><div class="nutrient">Carbs: </div>' + '<div class="nutrient-value"> ' + data.nutrients[7].value + data.nutrients[7].unit + '</div></div>');
 
-
-
-    // Initialize function
-    var init = function () {
-        console.log("---- hi init ----");
-        $('.jumbowrap').show();
-        foodSearchAjax();
+        labelWrapper.append(mainHeadingDiv);
+        labelWrapper.append(servingsDiv);
+        labelWrapper.append(caloriesDiv);
+        labelWrapper.append(proteinDiv);
+        labelWrapper.append(fatDiv);
+        labelWrapper.append(carbDiv);
+        label.append(labelWrapper);
+        // console.log("labelWrapper.html()", labelWrapper.html());
+        // console.log("results: ", results);
+        return label.html();
     };
-    // Start the 'app'
-    init();
+
+    // Show food photo on nutrition view
+    var photoDisplay = function (NDBOID) {
+        console.log("hi");
+        console.log(NDBOID);
+        if (NDBOID == 11124) {
+            var imgURL = "http://lorempixel.com/output/food-q-c-640-480-5.jpg";
+            return imgURL;
+        } else if (NDBOID == 28361) {
+            var imgURL = "http://cf.sunnywithachanceofsprinkles.com/wp-content/uploads/2016/01/italian-and-garlic-goldfish-31.png";
+            return imgURL;
+        } else if (NDBOID == 09252) {
+            var imgURL = "https://usapears.org/wp-content/uploads/2018/11/all-pears.png";
+            return imgURL;
+        } else if (NDBOID == 09040) {
+            var imgURL = "https://www.countrydoctornutritionalcenter.com/wp-content/uploads/2018/08/64D364B3-449C-4741-B82D-BC5764C294A7.png";
+            return imgURL;
+        } else if (NDBOID == 09003) {
+            var imgURL = "http://onapples.com/uploads/varieties/3y3v9tyf8h96.png";
+            return imgURL;
+        };
+    };
+
 
 });

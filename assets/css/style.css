@@ -234,9 +234,120 @@ td {
 }
 
 table {
-    width: 100%;
+    width: 65%;
 }
 
 tr {
     width: 100%;
+}
+
+#food-img-click {
+    text-align: center;
+}
+
+.food {
+    border: 10px solid #ccc;
+    padding: 25px 0;
+    margin: 10px;
+    float: left;
+    width: 17%;
+    text-align: center;
+}
+
+.food:hover {
+    border-color: goldenrod;
+}
+
+#nutrition-view {
+    width: 100%;
+    padding: 20px;
+    margin: 10px auto 20px;
+    border: 15px solid #60a506;
+    border-radius: 25px;
+    text-align: center;
+}
+
+#nutrition-view div {
+    /* border: 1px solid #ccc; */
+}
+
+.food-image img {
+    width: 35%;
+    float: left;
+    border-radius: 25px;
+}
+
+#label-wrapper {
+    background: #fff;
+    border: 1px solid #000;
+}
+
+.top-left {
+    width: 60%;
+}
+
+.top-left img {
+    width: 100%;
+    border-radius: 25px;
+}
+
+.top-right {
+
+}
+
+.bottom-left {
+
+}
+
+.bottom-right {
+
+}
+
+#nutrition-view h1 {
+    font-size: 2.3em;
+    margin: 10px 0 40px;
+}
+
+.servings, .calories, .protein, .fat, .carbs {
+    border-bottom: 1px solid #000;
+}
+
+.servings {
+    font-weight: bold;
+    font-size: 1.2em;
+}
+
+.nutrient-value {
+    width: 50%;
+    text-align: left;
+    float: left;
+    margin: 0 0 0 5px;
+    padding: 5px 0;
+    /* border-bottom: 1px solid black; */
+}
+
+.nutrient {
+    width: 45%;
+    text-align: left;
+    float: left;
+    margin: 0 0 0 5px;
+    padding: 5px 0;
+    /* border-bottom: 1px solid black; */
+}
+
+.label-wrapper {
+    border-bottom: 5px solid #000;    
+    border-top: 5px solid #000;
+    border-left: 1px solid #000;
+    border-right: 1px solid #000;
+    padding: 0 15px 30px;
+    height: 100%;
+    border-radius: 25px;
+}
+
+.label-header {
+    font-size: 2em;
+    font-weight: bold;
+    padding: 10px 15px;
+    border-bottom: 1px solid #000;
 }
