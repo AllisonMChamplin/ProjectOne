@@ -33,7 +33,7 @@ let x = "480w_still";
 $("#inner").empty();
 let playerName = $(this).val();
 
-let queryURL = $.get("https://api.giphy.com/v1/gifs/search?q=" + playerName + "&api_key=a0DYnx2tlU1LASvc3KFSBrqf6j4ttuJP&limit=3");
+let queryURL = $.get("https://api.giphy.com/v1/gifs/search?q=" + playerName + "&api_key=a0DYnx2tlU1LASvc3KFSBrqf6j4ttuJP&limit=3&rating=y");
 queryURL.done(function(response) { 
 console.log("success got data", response);
 
