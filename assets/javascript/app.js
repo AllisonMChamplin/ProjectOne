@@ -48,6 +48,7 @@ $(document).ready(function () {
         resultsInfo.attr("id", "results-div");
         resultsInfo.html("<span>Results 1 - 5</span>");
         displayDiv.append(resultsInfo);
+        
         for (var i = 0; i < x.list.item.length; i++) {
             var foodName = x.list.item[i].name;
             var foodId = x.list.item[i].ndbno;
@@ -125,7 +126,28 @@ $(document).ready(function () {
         buttonParentDiv.append(reportWrapTable);
     };
 
-
+/** AJAX request to the Giphy picturesport
+var foodReportAjax = function (foodNumber, buttonParentDiv) {
+    if (!foodNumber) {
+        console.log("false");
+        return false;
+    }
+    // https://api.nal.usda.gov/ndb/V2/reports?ndbno=01009&ndbno=01009&ndbno=45202763&ndbno=35193&type=b&format=json&api_key=DEMO_KEY
+    var APIKEY = "MTThsOXeyC4yDoAe048samFSx66c0bbwi0HO6m4G";
+    var queryURL = "https://api.nal.usda.gov/ndb/V2/reports?ndbno=" + foodNumber + "&format=json&q=" + "&max=5&offset=0" + "&api_key=" + APIKEY;
+    console.log("foodReportAjax queryURL: ", queryURL);
+    // AJAX request with the queryURL
+    $.ajax({
+        url: queryURL,
+        method: "GET"
+    })
+        .then(function (response) {
+            // storing the data from the AJAX request in the results variable
+            var results = response;
+            console.log("foodReportAjax results:", results);
+            displayFoodReportResults(results, foodNumber, buttonParentDiv);
+        });
+}; */
 
 
     // Initialize function
@@ -133,6 +155,8 @@ $(document).ready(function () {
         console.log("---- hi init ----");
         $('.jumbowrap').show();
         foodSearchAjax();
+        // here will be the picture search ajax giphy rated G
+
     };
     // Start the 'app'
     init();

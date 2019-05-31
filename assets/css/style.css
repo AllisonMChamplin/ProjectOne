@@ -1,7 +1,19 @@
 html {
 
 }
+.nav-link {
+    display: table-cell;
+    padding: .5rem 1rem;
+    border: 1px solid white;
+    position: relative;
+    left: 60px;
+}
 
+img{
+    border-radius: 25px;
+    width: 200px;
+    height: 200px;
+}
 body {
     font-family: 'Open Sans', sans-serif;
     font-Size: 15px;
@@ -34,7 +46,12 @@ div {
     border: 1px solid #cecece;
     padding: 8px;
 }
-
+.display-4 {
+    font-size: 3.5rem;
+    font-weight: 300;
+    line-height: 1.2;
+    margin-bottom: 20px;
+}
 
 .container {
     height: 100%;
@@ -42,6 +59,7 @@ div {
 
 h1, h2, h3, h4, h5 {
     font-family: 'Nunito', sans-serif;
+    text-align: center;
 }
 
 #title {
