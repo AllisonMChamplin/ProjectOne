@@ -1,18 +1,86 @@
-html {
+/* html {
 
-}
-.nav-link {
+} */
+/* .nav-link {
     display: table-cell;
     padding: .5rem 1rem;
     border: 1px solid white;
     position: relative;
     left: 60px;
+    
+        color:white;
+        box-shadow: -3px 3px orange, -2px 2px orange, -1px 1px orange;
+        border: 1px solid orange;
+
+
+
+} */
+
+
+.nav-link {
+  cursor: pointer;
+  margin-left: 5px;
+  margin-bottom: 15px;
+  text-shadow: 0 -2px 0 #4a8a65, 0 1px 1px #c2dece;
+  box-sizing: border-box;
+  font-size: 2em;
+  font-family: Helvetica, Arial, Sans-Serif;
+  text-decoration: none;
+  font-weight: bold;
+  color: #5ea97d;
+  height: 65px;
+  line-height: 65px;
+  padding: 0 50px;
+  display: inline-block;
+  width: auto;
+  background: linear-gradient(to bottom, #9ceabd 0%, #9ddab6 26%, #7fbb98 100%);
+  border-radius: 5px;
+  border-top: 1px solid #c8e2d3;
+  border-bottom: 1px solid #c2dece;
+  top: 0;
+  transition: all 0.06s ease-out;
+  position: relative;
 }
+.nav-link:visited {
+  color: #5ea97d;
+}
+
+.nav-link:hover {
+  background: linear-gradient(to bottom, #baf1d1 0%, #b7e4ca 26%, #96c7ab 100%);
+}
+
+.nav-link:active {
+  top: 6px;
+  text-shadow: 0 -2px 0 #7fbb98, 0 1px 1px #c2dece, 0 0 4px white;
+  color: white;
+}
+.nav-link:active:before {
+  top: 0;
+  box-shadow: 0 3px 3px rgba(0, 0, 0, 0.7), 0 3px 9px rgba(0, 0, 0, 0.2);
+}
+
+.nav-link:before {
+  display: inline-block;
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  z-index: -1;
+  top: 6px;
+  border-radius: 5px;
+  height: 65px;
+  background: linear-gradient(to top, #1e5033 0%, #378357 6px);
+  transition: all 0.078s ease-out;
+  box-shadow: 0 1px 0 2px rgba(0, 0, 0, 0.3), 0 5px 2.4px rgba(0, 0, 0, 0.5), 0 10.8px 9px rgba(0, 0, 0, 0.2);
+}
+
+
 
 img{
     border-radius: 25px;
-    width: 200px;
-    height: 200px;
+    width: 250px;
+    height: 250px;
+    margin-top: 25px;
 }
 body {
     font-family: 'Open Sans', sans-serif;
@@ -191,6 +259,8 @@ footer {
     margin-top: 40px;
     color:#fff;
     line-height: 1.3em;
+    text-align: center;
+
 }
 
 footer a, footer a:visited {
