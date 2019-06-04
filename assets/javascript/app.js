@@ -1,7 +1,5 @@
 $(document).ready(function () {
 
-    // <!-- https://api.nal.usda.gov/ndb/search/?format=json&q=butter&sort=n&max=25&offset=0&api_key=DEMO_KEY -->
-
     var searchList = [];
 
     // Click handler for the Search Button
