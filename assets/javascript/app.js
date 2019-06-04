@@ -1,162 +1,121 @@
 $(document).ready(function () {
 
-    var searchList = [];
-
-    // Click handler for the Search Button
-    $("#run-search").on("click", function (event) {
-        console.log("clicked search");
-        event.preventDefault();
-        $('#warn').empty();
-        userSearchTerm = $("#search-term").val().trim();
-        userSearchTermSpacer = encodeURIComponent(userSearchTerm);
-        foodSearchAjax(userSearchTermSpacer);
-    });
+    var measureOption = 0;
+    var queryResults;
+    var NDBOID = 0;
 
 
-
-    // AJAX request to the USDA Search
-    var foodSearchAjax = function (input) {
-        if (!input) {
-            console.log("false");
-            return false;
-        }
-        searchList.push(input);
-        console.log("searchList: ", searchList);
-        var APIKEY = "MTThsOXeyC4yDoAe048samFSx66c0bbwi0HO6m4G";
-        var queryURL = "https://api.nal.usda.gov/ndb/search/?format=json&q=" + input + "&max=5&offset=0" + "&api_key=" + APIKEY;
-        console.log("foodSearchAjax queryURL: ", queryURL);
-        // AJAX request with the queryURL
-        $.ajax({
-            url: queryURL,
-            method: "GET"
-        })
-            .then(function (response) {
-                // storing the data from the AJAX request in the results variable
-                var results = response;
-                console.log("foodSearchAjax results:", results);
-                displayFoodSearchResults(results);
-            });
+    var nutrientNames = {
+        // 208: "Calories",
+        203: "Protein",
+        204: "Total Fat",
+        205: "Carbohydrates",
+        291: "Fiber",
+        269: "Sugar",
+        301: "Calcium",
+        303: "Iron",
+        304: "Magnesium",
+        305: "Phosphorus",
+        306: "Potassium",
+        307: "Sodium",
+        309: "Zinc"
     };
-
-    var displayFoodSearchResults = function (x) {
-        $('.jumbowrap').hide();        
-        var displayDiv = $('#food-search-results');
-        displayDiv.empty();
-        var resultsInfo = $('<div>');
-        resultsInfo.attr("id", "results-div");
-        resultsInfo.html("<span>Results 1 - 5</span>");
-        displayDiv.append(resultsInfo);
-        
-        for (var i = 0; i < x.list.item.length; i++) {
-            var foodName = x.list.item[i].name;
-            var foodId = x.list.item[i].ndbno;
-            var button = $('<button class="search-wrapper">');
-            button.text(foodName);
-            button.attr("value", foodId);
-            var buttonParentDiv = $("<div>");
-            buttonParentDiv.attr("data-id", foodId);
-            buttonParentDiv.append(button);
-            displayDiv.append(buttonParentDiv);
-        }
-    };
-
-    $('#food-search-results').on('click', 'button', function (event) {
-        console.log("button clicked");
-        var buttonParentDiv = $(this).parent();
-        var foodNumber = $(this).attr("value");
-        foodReportAjax(foodNumber, buttonParentDiv);
-    });
-
 
 
     // AJAX request to the USDA Report
-    var foodReportAjax = function (foodNumber, buttonParentDiv) {
-        if (!foodNumber) {
-            console.log("false");
-            return false;
-        }
-        // https://api.nal.usda.gov/ndb/V2/reports?ndbno=01009&ndbno=01009&ndbno=45202763&ndbno=35193&type=b&format=json&api_key=DEMO_KEY
+    var nutritionDetailAjax = function (NDBOID) {
         var APIKEY = "MTThsOXeyC4yDoAe048samFSx66c0bbwi0HO6m4G";
-        var queryURL = "https://api.nal.usda.gov/ndb/V2/reports?ndbno=" + foodNumber + "&format=json&q=" + "&max=5&offset=0" + "&api_key=" + APIKEY;
-        console.log("foodReportAjax queryURL: ", queryURL);
-        // AJAX request with the queryURL
+        var queryURL = "https://api.nal.usda.gov/ndb/V2/reports?ndbno=" + NDBOID + "&format=json&max=5&offset=0&type=b&api_key=" + APIKEY;
+        console.log("nutritionDetailAjax queryURL", queryURL);
         $.ajax({
             url: queryURL,
             method: "GET"
         })
             .then(function (response) {
-                // storing the data from the AJAX request in the results variable
-                var results = response;
-                console.log("foodReportAjax results:", results);
-                displayFoodReportResults(results, foodNumber, buttonParentDiv);
+                queryResults = response;
+                displayNutritionResults(queryResults, NDBOID);
             });
     };
 
-    var displayFoodReportResults = function (results, foodNumber, buttonParentDiv) {
-        console.log("here");
-        // var displayDiv = $('#food-report-results');
-        var reportWrapTable = $("<table class='report-wrapper'></table>");
-        reportWrapTable.attr("id", foodNumber);
 
-        var foodId = results.foods[0].food.desc.ndbno;
-        var foodIdRow = $('<tr>');
-        foodIdRow.html("<td class='data-heading-col'>Title:</td>" + "<td class='data-col'>" + foodId + "</td></tr>");
-        reportWrapTable.append(foodIdRow);
-        
-        var foodName = results.foods[0].food.ing.desc;
-        var foodNameRow = $('<tr>');
-        foodNameRow.html("<td class='data-heading-col'>Name:</td>" + "<td class='data-col'>" + foodName + "</td></tr></table>");        
-        reportWrapTable.append(foodNameRow);
+    var displayNutritionResults = function (queryResults, NDBOID) {
+        var nutritionViewDiv = $('#nutrition-view');
+        var foodTitle = $('<h2 id="food-title">');
+        foodTitle.text(queryResults.foods[0].food.desc.name);
+        nutritionViewDiv.empty();
+        nutritionViewDiv.append(foodTitle);
+        nutritionViewDiv.append(nutritionLabelSelector(NDBOID));
+    };
 
-        var nutrientsRows = function () { 
-            console.log("hi loop", results.foods[0].food.nutrients.length);  
-            console.log("hi name: ", results.foods[0].food.nutrients[0].name);         
-            for (var i = 0; i < results.foods[0].food.nutrients.length; i++) {
-                console.log("loop#: ", i);
-                var title = results.foods[0].food.nutrients[i].name;
-                var value = results.foods[0].food.nutrients[i].value;
+
+    var nutritionLabelSelector = function (NDBOID) {
+        var label = $('<div class="label">');
+        var labelWrapper = $('<div class="label-wrapper clearfix">');
+        var mainHeadingDiv = $('<div class="label-header">Nutrition Facts</div>');
+        var measuresDiv = $('<div id="measures"><span id="measures-title">Portion Size: </span></div>');
+        var measuresSelect = $('<select id="measures-select">');
+        var measuresOptions = function () {
+            for (var i = 0; i < queryResults.foods[0].food.nutrients[0].measures.length; i++) {
+                var option = $('<option>');
+                option.attr("value", i);
+                option.text(queryResults.foods[0].food.nutrients[0].measures[i].qty + ' ' + queryResults.foods[0].food.nutrients[0].measures[i].label);
+                measuresSelect.append(option);
+            };
+        };
+        measuresOptions();
+        measuresDiv.append(measuresSelect);
+        labelWrapper.append(mainHeadingDiv, measuresDiv, nutrientTable());
+        label.append(labelWrapper);
+        return label.html();
+    };
+
+
+    var nutrientTable = function () {
+        // console.log("hi nutrientTable: ");
+        var tableWrapper = $('<div>');
+        var tableDiv = $('<div id="table-wrapper">');
+        var reportWrapTable = $("<table class='report-wrapper'>");
+        var simpleResults = queryResults.foods[0].food;
+        for (var i = 0; i < simpleResults.nutrients.length; i++) {
+            var id = simpleResults.nutrients[i].nutrient_id;
+            // console.log("id: ", id);
+            if (id in nutrientNames) {
+                // console.log("Fix", id); 
+                // console.log("nutrientNames ", nutrientNames[simpleResults.nutrients[i].nutrient_id]);    
+                var nutrientTitle = nutrientNames[simpleResults.nutrients[i].nutrient_id];
+                var value = simpleResults.nutrients[i].measures[measureOption];
                 var nutrientRow = $('<tr>');
-                nutrientRow.html("<td class='data-heading-col'>" + title + ":</td>" + "<td class='data-col'>" + value + "</td></tr>");
+                nutrientRow.html("<td class='data-heading-col'>" + nutrientTitle + ":</td>" +
+                    "<td class='data-col'>" + value.value + ' ' + value.eunit + "</td></tr>");
                 reportWrapTable.append(nutrientRow);
+                tableDiv.append(reportWrapTable);
+                tableWrapper.append(tableDiv);
             }
-        }
-        nutrientsRows();
-        buttonParentDiv.append(reportWrapTable);
+        };
+        return tableWrapper.html();
     };
 
-/** AJAX request to the Giphy picturesport
-var foodReportAjax = function (foodNumber, buttonParentDiv) {
-    if (!foodNumber) {
-        console.log("false");
-        return false;
-    }
-    // https://api.nal.usda.gov/ndb/V2/reports?ndbno=01009&ndbno=01009&ndbno=45202763&ndbno=35193&type=b&format=json&api_key=DEMO_KEY
-    var APIKEY = "MTThsOXeyC4yDoAe048samFSx66c0bbwi0HO6m4G";
-    var queryURL = "https://api.nal.usda.gov/ndb/V2/reports?ndbno=" + foodNumber + "&format=json&q=" + "&max=5&offset=0" + "&api_key=" + APIKEY;
-    console.log("foodReportAjax queryURL: ", queryURL);
-    // AJAX request with the queryURL
-    $.ajax({
-        url: queryURL,
-        method: "GET"
-    })
-        .then(function (response) {
-            // storing the data from the AJAX request in the results variable
-            var results = response;
-            console.log("foodReportAjax results:", results);
-            displayFoodReportResults(results, foodNumber, buttonParentDiv);
-        });
-}; */
 
 
-    // Initialize function
-    var init = function () {
-        console.log("---- hi init ----");
-        $('.jumbowrap').show();
-        foodSearchAjax();
-        // here will be the picture search ajax giphy rated G
 
-    };
-    // Start the 'app'
-    init();
+
+
+
+
+
+
+
+
+
+
+    $('.food').on("click", function () {
+        console.log("hi");
+        NDBOID = $(this).attr("value");
+        console.log("*Click!* Food button clicked.", NDBOID);
+        nutritionDetailAjax(NDBOID);
+        window.location = "detail.html";
+    });
+
+
 
 });
