@@ -12,6 +12,7 @@
     <link href="https://fonts.googleapis.com/css?family=Nunito|Open+Sans&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="assets/css/reset.css" type="text/css">
     <link rel="stylesheet" href="assets/css/style.css" type="text/css">
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 
     <title>Food-Data Central!</title>
 
@@ -45,9 +46,7 @@
                         <div class="layer"></div>
                         <div class="layer"></div>
                     </div>
-
                 </div>
-
             </div>
         </div>
     </header>
@@ -55,26 +54,57 @@
     <div class="container wrapper clearfix">
         <div class="row">
             <div class="col nutrition-wrapper">
-                <div id="food-title"></div>
-                <div class="clearfix">
-                    <div id="food-photo" class="col-6"></div>
-                    <div id="nutrition-view" class="col-6"></div>
+                <div class="row">
+                    <div class="col">
+                        <div id="food-title"></div>
+                    </div>
                 </div>
-                <a href="index.html" class="back">Back to Main Page</a>
+                <div class="row">
+                    <div class="col">
+                        <div id="food-photo"></div>
+                    </div>
+                    <div id="nutrition-view" class="col-6">
+                        <div class="row">
+                            <div class="col">
+                                <div id="nutrition-wrap"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <div id="myDiv"></div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <a href="index.html" class="back">Back to Main Page</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <footer>&copy; Copyright 2019</footer>
             </div>
         </div>
     </div>
-    <div class="container wrapper clearfix">
-        <div class="row">
-            <footer>
-                <div class="col">&copy; Copyright 2019</div>
-            </footer>
-        </div>
     </div>
 
 </body>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
 <script src="assets/javascript/detail.js"></script>
+
+<script>
+    var data = [
+        {
+            x: ['giraffes', 'orangutans', 'monkeys'],
+            y: [20, 14, 23],
+            type: 'bar'
+        }
+    ];
+    Plotly.newPlot('myDiv', data);
+</script>
 
 </html>

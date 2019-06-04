@@ -55,13 +55,15 @@ $(document).ready(function () {
     var displayNutritionResults = function (queryResults, NDBOID) {
         console.log("lkasdh", queryResults.foods[0].food.desc.name);
         var nutritionViewDiv = $('#nutrition-view');
+        var nutritionWrapDiv = $('#nutrition-wrap');
         var foodTitleDiv = $('#food-title');
         var foodTitle = $('<h2>');
         foodTitle.text(queryResults.foods[0].food.desc.name);
         foodTitleDiv.append(foodTitle);
         // nutritionViewDiv.empty();
         // nutritionViewDiv.append(foodTitle);
-        nutritionViewDiv.append(nutritionLabelSelector(NDBOID));
+        nutritionWrapDiv.append(nutritionLabelSelector(NDBOID));
+        nutritionViewDiv.append(nutritionWrapDiv);
     };
 
 

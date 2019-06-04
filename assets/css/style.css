@@ -464,6 +464,7 @@ tr {
 
   #food-title h2 {
     margin-bottom: 30px;
+    font-size: 30px;
   }
 
   #label-wrapper {
@@ -519,4 +520,8 @@ a.back:hover {
   background: #80b934;
   text-decoration: none;
   border: 6px solid #365311;
+}
+
+#nutrition-wrap {
+
 }
