@@ -1,106 +1,120 @@
 $(document).ready(function () {
 
+    var measureOption = 0;
+    var queryResults;
+    var NDBOID = 0;
+
+    var nutrientNames = {
+        // 208: "Calories",
+        203: "Protein",
+        204: "Total Fat",
+        205: "Carbohydrates",
+        291: "Fiber",
+        269: "Sugar",
+        301: "Calcium",
+        303: "Iron",
+        304: "Magnesium",
+        305: "Phosphorus",
+        306: "Potassium",
+        307: "Sodium",
+        309: "Zinc"
+    };
+
     $('#food-img-click').on('click', 'div', function (event) {
-        var NDBOID = $(this).attr("value");
+        NDBOID = $(this).attr("value");
         console.log("*Click!* Food button clicked.", NDBOID);
-        // var resultsDiv = $('#nutrition-view');
-        var data = nutritionDetailAjax(NDBOID);
-        $('#nutrition-view').empty();
-        $('#nutrition-view').html('<img src="./assets/images/8.gif">')
-        // resultsDiv.empty();
+        nutritionDetailAjax(NDBOID);
     });
+
 
     // AJAX request to the USDA Report
     var nutritionDetailAjax = function (NDBOID) {
-        if (!NDBOID) {
-            console.log("No NDBOID! Return false.");
-            return false;
-        }
-        // https://api.nal.usda.gov/ndb/V2/reports?ndbno=01009&ndbno=01009&ndbno=45202763&ndbno=35193&type=b&format=json&api_key=DEMO_KEY
         var APIKEY = "MTThsOXeyC4yDoAe048samFSx66c0bbwi0HO6m4G";
-        var queryURL = "https://api.nal.usda.gov/ndb/V2/reports?ndbno=" + NDBOID + "&format=json&max=5&offset=0&type=f&api_key=" + APIKEY;
+        var queryURL = "https://api.nal.usda.gov/ndb/V2/reports?ndbno=" + NDBOID + "&format=json&max=5&offset=0&type=b&api_key=" + APIKEY;
         console.log("nutritionDetailAjax queryURL", queryURL);
-        // AJAX request with the queryURL
         $.ajax({
             url: queryURL,
             method: "GET"
         })
             .then(function (response) {
-                // storing the data from the AJAX request in the results variable
-                var results = response;
-                console.log("nutritionDetailAjax Results:", results);
-                displayNutritionResults(results, NDBOID);
+                queryResults = response;
+                displayNutritionResults(NDBOID);
             });
     };
 
-    // Build the nutrition detail view
-    var displayNutritionResults = function (results, NDBOID) {
-        var photoURL = photoDisplay(NDBOID);
-        var label = nutritionLabel(results, NDBOID);
+
+    var displayNutritionResults = function (NDBOID) {
         var nutritionViewDiv = $('#nutrition-view');
         nutritionViewDiv.empty();
-        var foodName = results.foods[0].food.desc.name;
-        var foodNameHeading = $('<h1>');
-        foodNameHeading.text(foodName);
-        var nutritionRowTop = $('<div class="row"><div class="col top-left">' + '<img src="' + photoURL + '">' + '</div><div class="col top-right">' + label + '</div></div>');
-        var nutritionRowBottom = $('<div class="row"><div class="col bottom-left">MyPlate<br>*** Add food group name here from API, and then figure out how to add myPlate group ***</div><div class="col bottom-right">Macros pie chart</div></div>')
-        nutritionViewDiv.append(foodNameHeading, nutritionRowTop, nutritionRowBottom);
+        nutritionViewDiv.append(nutritionLabelSelector(NDBOID));
     };
 
-    // Build the nutrition label
-    var nutritionLabel = function (results, NDBOID) {
-        var data = results.foods[0].food;
-        var label = $('<div class="label">');
+
+    var nutritionLabelSelector = function (NDBOID) {
         var labelWrapper = $('<div class="label-wrapper clearfix">');
         var mainHeadingDiv = $('<div class="label-header">Nutrition Facts</div>');
-        var servingsInfoDiv = $('<div>');
-        var servingsInfoButton = $('<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">Learn about servings!</button>');
-        servingsInfoDiv.append(servingsInfoButton);
-        var servingsDiv = $('<div class="servings clearfix"></div>');
-        var servingsNutrientDiv = $('<div class="nutrient">Serving Size: </div>');
-        var servingsValueDiv = $('<div class="nutrient-value">100g </div>');
-        servingsDiv.append(servingsNutrientDiv, servingsValueDiv, servingsInfoDiv);
-
-// <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">Launch demo modal</button>
-
-        var caloriesDiv = $('<div class="calories clearfix"><div class="nutrient">Calories: </div>' + '<div class="nutrient-value"> ' + data.nutrients[2].value +  data.nutrients[4].unit + '</div></div>');
-        var proteinDiv = $('<div class="protein clearfix"><div class="nutrient">Protein: </div>' + '<div class="nutrient-value"> ' + data.nutrients[4].value + data.nutrients[4].unit + '</div></div>');
-        var fatDiv = $('<div class="fat clearfix"><div class="nutrient">Fat: </div>' + '<div class="nutrient-value"> ' + data.nutrients[5].value + data.nutrients[5].unit + '</div></div>');
-        var carbDiv = $('<div class="carbs clearfix"><div class="nutrient">Carbs: </div>' + '<div class="nutrient-value"> ' + data.nutrients[7].value + data.nutrients[7].unit + '</div></div>');
-
-        labelWrapper.append(mainHeadingDiv);
-        labelWrapper.append(servingsDiv);
-        labelWrapper.append(caloriesDiv);
-        labelWrapper.append(proteinDiv);
-        labelWrapper.append(fatDiv);
-        labelWrapper.append(carbDiv);
-        label.append(labelWrapper);
-        // console.log("labelWrapper.html()", labelWrapper.html());
-        // console.log("results: ", results);
-        return label.html();
-    };
-
-    // Show food photo on nutrition view
-    var photoDisplay = function (NDBOID) {
-        console.log("hi");
-        console.log(NDBOID);
-        if (NDBOID == 11124) {
-            var imgURL = "http://lorempixel.com/output/food-q-c-640-480-5.jpg";
-            return imgURL;
-        } else if (NDBOID == 28361) {
-            var imgURL = "http://cf.sunnywithachanceofsprinkles.com/wp-content/uploads/2016/01/italian-and-garlic-goldfish-31.png";
-            return imgURL;
-        } else if (NDBOID == 09252) {
-            var imgURL = "https://usapears.org/wp-content/uploads/2018/11/all-pears.png";
-            return imgURL;
-        } else if (NDBOID == 09040) {
-            var imgURL = "https://www.countrydoctornutritionalcenter.com/wp-content/uploads/2018/08/64D364B3-449C-4741-B82D-BC5764C294A7.png";
-            return imgURL;
-        } else if (NDBOID == 09003) {
-            var imgURL = "http://onapples.com/uploads/varieties/3y3v9tyf8h96.png";
-            return imgURL;
+        var measuresDiv = $('<div id="measures"><span id="measures-title">Portion Size: </span></div>');
+        var measuresSelect = $('<select id="measures-select">');
+        var measuresOptions = function () {
+            for (var i = 0; i < queryResults.foods[0].food.nutrients[0].measures.length; i++) {
+                var option = $('<option>');
+                option.attr("value", i);
+                option.text(queryResults.foods[0].food.nutrients[0].measures[i].qty + ' ' + queryResults.foods[0].food.nutrients[0].measures[i].label);
+                measuresSelect.append(option);
+            };
         };
+        measuresOptions();
+        measuresDiv.append(measuresSelect);
+        labelWrapper.append(mainHeadingDiv, measuresDiv, nutrientTable());
+        return labelWrapper.html();
     };
+
+
+    var nutrientTable = function () {
+        // console.log("hi nutrientTable: ");
+        var tableWrapper = $('<div>');
+        var tableDiv = $('<div id="table-wrapper">');
+        var reportWrapTable = $("<table class='report-wrapper'>");
+        var simpleResults = queryResults.foods[0].food;
+        for (var i = 0; i < simpleResults.nutrients.length; i++) {
+            var id = simpleResults.nutrients[i].nutrient_id;
+            // console.log("id: ", id);
+            if (id in nutrientNames) {
+                // console.log("Fix", id); 
+                // console.log("nutrientNames ", nutrientNames[simpleResults.nutrients[i].nutrient_id]);    
+                var nutrientTitle = nutrientNames[simpleResults.nutrients[i].nutrient_id];
+                var value = simpleResults.nutrients[i].measures[measureOption];
+                var nutrientRow = $('<tr>');
+                nutrientRow.html("<td class='data-heading-col'>" + nutrientTitle + ":</td>" +
+                    "<td class='data-col'>" + value.value + ' ' + value.eunit + "</td></tr>");
+                reportWrapTable.append(nutrientRow);
+                tableDiv.append(reportWrapTable);
+                tableWrapper.append(tableDiv);
+            }
+        };
+        return tableWrapper.html();
+    };
+
+
+    $(document.body).on("change", "#measures-select", function (e) {
+        var option = $("#measures-select option:selected");
+        var measuresOptionSelectedValue = $("#measures-select option:selected").val();
+        console.log("hi", measuresOptionSelectedValue);
+        $("option").removeAttr('selected');
+        option.attr("selected", "selected");
+        // $("#measures-select").val(measuresOptionSelectedValue);
+        measureOption = measuresOptionSelectedValue;
+        refreshNutrientTable(NDBOID);
+    });
+
+
+    var refreshNutrientTable = function (NDBOID) {
+        console.log("refresh");
+        $('#table-wrapper').empty();
+        $('#table-wrapper').append(nutrientTable());
+        measureOption = 0;
+    };
+
 
 
 });
