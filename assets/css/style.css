@@ -218,8 +218,8 @@ p {
     font-weight: bold;
     width: 35%;
     text-align: right;
-    padding: 5px 10px;
-    background: #f2f7f2;
+    padding: 7px 10px;
+    /* background: #f2f7f2; */
 }
 
 .data-col {
@@ -395,3 +395,6 @@ select {
     margin: 20px 0;
     font-size: 2em;
 }
+
+tr:nth-child(even) {background: #ececec}
+tr:nth-child(odd) {background: #FFF}
