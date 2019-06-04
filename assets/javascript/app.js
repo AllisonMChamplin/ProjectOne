@@ -38,14 +38,17 @@ $(document).ready(function () {
         })
             .then(function (response) {
                 queryResults = response;
-                displayNutritionResults(NDBOID);
+                displayNutritionResults(queryResults, NDBOID);
             });
     };
 
 
-    var displayNutritionResults = function (NDBOID) {
+    var displayNutritionResults = function (queryResults, NDBOID) {
         var nutritionViewDiv = $('#nutrition-view');
+        var foodTitle = $('<h2 id="food-title">');
+        foodTitle.text(queryResults.foods[0].food.desc.name);
         nutritionViewDiv.empty();
+        nutritionViewDiv.append(foodTitle);
         nutritionViewDiv.append(nutritionLabelSelector(NDBOID));
     };
 

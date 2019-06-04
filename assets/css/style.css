@@ -390,3 +390,8 @@ td {
 select {
     margin: 7px auto;
 }
+
+#food-title {
+    margin: 20px 0;
+    font-size: 2em;
+}
