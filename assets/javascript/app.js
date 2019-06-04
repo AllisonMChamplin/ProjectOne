@@ -51,6 +51,7 @@ $(document).ready(function () {
 
 
     var nutritionLabelSelector = function (NDBOID) {
+        var label = $('<div class="label">');
         var labelWrapper = $('<div class="label-wrapper clearfix">');
         var mainHeadingDiv = $('<div class="label-header">Nutrition Facts</div>');
         var measuresDiv = $('<div id="measures"><span id="measures-title">Portion Size: </span></div>');
@@ -66,7 +67,8 @@ $(document).ready(function () {
         measuresOptions();
         measuresDiv.append(measuresSelect);
         labelWrapper.append(mainHeadingDiv, measuresDiv, nutrientTable());
-        return labelWrapper.html();
+        label.append(labelWrapper);
+        return label.html();
     };
 
 

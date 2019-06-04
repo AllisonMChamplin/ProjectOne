@@ -386,3 +386,7 @@ td {
 #measures {
     margin: 14px 0;
 }
+
+select {
+    margin: 7px auto;
+}
