@@ -522,6 +522,6 @@ a.back:hover {
   border: 6px solid #365311;
 }
 
-#nutrition-wrap {
-
+#nutrition-view img {
+  height: 100%;
 }
