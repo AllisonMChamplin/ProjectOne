@@ -134,7 +134,7 @@
         return vars;
     };
 
-
+    var thingToPullForMyPlate = "";
     // AJAX request to the USDA Report
     var nutritionDetailAjax = function (NDBOID) {
         var APIKEY = "MTThsOXeyC4yDoAe048samFSx66c0bbwi0HO6m4G";
@@ -146,6 +146,7 @@
         })
             .then(function (response) {
                 queryResults = response;
+                thingtoPullForMyPlate = queryResults.foods[0].food;
                 displayNutritionResults(queryResults, NDBOID);
             });
     };
@@ -318,7 +319,7 @@
         }
     ];
     Plotly.newPlot('myDiv', data);
-    displayMyPLate(queryResults.foods[0].food);
+    displayMyPLate(thingtoPullForMyPlate);
     
     
 </script>
