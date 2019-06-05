@@ -243,7 +243,7 @@ $(document).ready(function () {
     };
     // Start the 'app'
    // init();
-    displayMyPLate("banana");
-    displayGifs("banana")
+    //displayMyPLate("banana");
+    //displayGifs("banana")
 
 });
