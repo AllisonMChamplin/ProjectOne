@@ -154,6 +154,7 @@
     // Display food title and call label function
     var displayNutritionResults = function (queryResults, NDBOID) {
         console.log("lkasdh", queryResults.foods[0].food.desc.name);
+        
         var nutritionViewDiv = $('#nutrition-view');
         var nutritionWrapDiv = $('#nutrition-wrap');
         var foodTitleDiv = $('#food-title');
@@ -165,7 +166,7 @@
         nutritionWrapDiv.append(nutritionLabelSelector(NDBOID));
         nutritionViewDiv.append(nutritionWrapDiv);
     };
-
+    
 
     // Build the nutrition label
     var nutritionLabelSelector = function (NDBOID) {
@@ -258,7 +259,7 @@
         }
     ];
     Plotly.newPlot('myDiv', data);
-    displayMyPLate("banana");
+    displayMyPLate(queryResults.foods[0].food);
     
     
 </script>
