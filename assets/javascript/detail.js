@@ -38,7 +38,7 @@ $(document).ready(function () {
     // AJAX request to the USDA Report
     var nutritionDetailAjax = function (NDBOID) {
         var APIKEY = "MTThsOXeyC4yDoAe048samFSx66c0bbwi0HO6m4G";
-        var queryURL = "https://api.nal.usda.gov/ndb/V2/reports?ndbno=" + NDBOID + "&format=json&max=5&offset=0&type=b&api_key=" + APIKEY;
+        var queryURL = "https://cors-anywhere.herokuapp.com/https://api.nal.usda.gov/ndb/V2/reports?ndbno=" + NDBOID + "&format=json&max=5&offset=0&type=b&api_key=" + APIKEY;
         console.log("nutritionDetailAjax queryURL", queryURL);
         $.ajax({
             url: queryURL,
