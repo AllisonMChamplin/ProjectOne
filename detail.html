@@ -250,6 +250,65 @@
         $('#food-photo').append('<img class="food-detail-image" src="' + foodPath + '" />');
         nutritionDetailAjax(NDBOID);
     };
+    var displayMyPLate = function (input) {
+        var APIKEY = "MTThsOXeyC4yDoAe048samFSx66c0bbwi0HO6m4G";
+        var queryURL = "https://api.nal.usda.gov/ndb/search/?format=json&q=" + input + "&max=100&offset=0" + "&api_key=" + APIKEY;
+
+        // AJAX request with the queryURL
+        $.ajax({
+            url: queryURL,
+            method: "GET"
+        })
+            .then(function (response) {
+                // storing the data from the AJAX request in the results variable
+                var results = response;
+                var i = 0;
+                var foodGroup = results.list.item[i].group;
+                foodGroup = foodGroup.toLowerCase();
+                do{
+                    i++;
+                    foodGroup = results.list.item[i].group;
+                    foodGroup = foodGroup.toLowerCase();
+                    console.log(foodGroup);
+                   
+
+                }while(foodGroup === "branded food products database");
+                
+                
+                console.log(foodGroup);
+                console.log(results);
+                //fruits
+                if (foodGroup === "fruits and fruit juices" || foodGroup === "legumes and legume products") {
+                    $('#myPlateImage').append('<img id="plateThing"src="./assets/images/MP_FRUITS.png" />');
+                }
+                //grains
+                else if (foodGroup === "breakfast cereal" || foodGroup === "cereal grains and pasta" || foodGroup === "nut and seed products" || foodGroup === "baked products") {
+                    $('#myPlateImage').append('<img id="plateThing"src="./assets/images/MP_GRAINS.png" />');
+                }
+                //vegetables
+                else if (foodGroup === "vegetables and vegetable products") {
+                    $('#myPlateImage').append('<img id="plateThing"src="./assets/images/MP_VEGETABLES.png" />');
+                }
+                //protein 
+                else if (foodGroup === "finfish and shellfish products" || foodGroup === "lamb, veal and game products" || foodGroup === "pork products" || foodGroup === "poultry products" || foodGroup === "sausages and luncheon meats" || foodGroup === "beef products") {
+                    $('#myPlateImage').append('<img id="plateThing"src="./assets/images/MP_PROTEIN.png" />');
+                }
+                //dairy
+                else if (foodGroup === "dairy and egg products") {
+                    $('#myPlateImage').append('<img id="plateThing"src="./assets/images/MP_DAIRY.png" />');
+                }
+                //junk
+                else if (foodGroup == "fast foods" || foodGroup == "fats and oils" || foodGroup == "snacks" || foodGroup == "sweets" || foodGroup == "soups, sauces and gravys" || foodGroup == "alaskan native and native american products" || foodGroup == "beverages" || foodGroup == "spices and herbs") {
+                    $('#myPlateImage').append('<img id="plateThing"src="./assets/images/MP_OTHER.png" />');
+                }
+                else{
+                    $('#myPlateImage').append('<img id="plateThing"src="./assets/images/MP_OTHER.png" />');
+                }
+            });
+
+
+
+    };
     buildNutritionView();
     var data = [
         {
