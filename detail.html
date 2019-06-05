@@ -313,13 +313,13 @@
     buildNutritionView();
     var data = [
         {
-            x: ['giraffes', 'orangutans', 'monkeys'],
-            y: [20, 14, 23],
+            x: ['Energy/Calories', 'Protein', 'Total Fat', 'Carbohydrates', 'Fiber', 'Sugar'],
+            y: [90, 1.1, 0.33, 23.07, 2.6, 12.74],
             type: 'bar'
         }
     ];
     Plotly.newPlot('myDiv', data);
-    displayMyPLate(thingtoPullForMyPlate);
+    displayMyPLate(queryResults.foods[0].food.desc.name);
     
     
 </script>
