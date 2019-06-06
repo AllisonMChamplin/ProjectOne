@@ -50,7 +50,7 @@ $(document).ready(function () {
 
     // Display food title and call label function
     var displayNutritionResults = function (response) {
-        console.log("bird", response);
+        // console.log("bird", response);
         var foodTitleDiv = $('#food-title');
         var foodTitle = $('<h2>');
         foodTitle.text(response.foods[0].food.desc.name);
@@ -110,7 +110,7 @@ $(document).ready(function () {
     $(document.body).on("change", "#measures-select", function (e) {
         var option = $("#measures-select option:selected");
         var measuresOptionSelectedValue = $("#measures-select option:selected").val();
-        console.log("hi", measuresOptionSelectedValue);
+        // console.log("hi", measuresOptionSelectedValue);
         $("option").removeAttr('selected');
         option.attr("selected", "selected");
         measureOption = measuresOptionSelectedValue;
@@ -123,7 +123,7 @@ $(document).ready(function () {
         console.log("refresh");
         var APIKEY = "MTThsOXeyC4yDoAe048samFSx66c0bbwi0HO6m4G";
         var queryURL = "https://cors-anywhere.herokuapp.com/https://api.nal.usda.gov/ndb/V2/reports?ndbno=" + NDBOID + "&format=json&max=5&offset=0&type=b&api_key=" + APIKEY;
-        console.log("refreshNutrientTableAjax queryURL", queryURL);
+        // console.log("refreshNutrientTableAjax queryURL", queryURL);
         $.ajax({
             url: queryURL,
             method: "GET"
@@ -163,7 +163,7 @@ $(document).ready(function () {
     };
 
 
-    // GIPHY 
+    // GIPHY //
     // Ajax call to GiphyAPI
     var gifRequest = function (giphySearchString) {
         var APIKEY = "DPBvGpuy5v0lsWlSAd51dsjMvJ6rjWcP";
@@ -178,10 +178,6 @@ $(document).ready(function () {
             });
     };
 
-    var displayGifs = function (x) {
-        console.log("cheers");
-        console.log("x: ", x);
-    };
 
     // Function to add GIPHYAPI ajax results array to the page
     var displayGifs = function (x) {
@@ -223,45 +219,95 @@ $(document).ready(function () {
             $(this).attr("data-state", "still");
         }
     });
-    // END GIPHY
+    // END GIPHY //
 
+    // My Plate //
 
-    // This function builds the detail view page
-    var buildDetailPage = function () {
-        measureOption = 0;
-        NDBOID = getUrlVars()["NDBOID"];
-        foodNameString = getUrlVars()["foodNameString"];
-        console.log("foodNameString:", foodNameString);
-        giphySearchString = encodeURIComponent(foodNameString);
-        nutritionDetailAjax(NDBOID);
-        gifRequest(giphySearchString);
+    var displayMyPLate = function (input) {
+
+        var APIKEY = "MTThsOXeyC4yDoAe048samFSx66c0bbwi0HO6m4G";
+        var queryURL = "https://cors-anywhere.herokuapp.com/https://api.nal.usda.gov/ndb/V2/reports?ndbno=" + NDBOID + "&format=json&max=1&offset=0" + "&type=f&api_key=" + APIKEY;
+
+        // var APIKEY = "MTThsOXeyC4yDoAe048samFSx66c0bbwi0HO6m4G";
+        // var queryURL = "https://cors-anywhere.herokuapp.com/https://api.nal.usda.gov/ndb/search/?format=json&q=" + input + "&max=100&offset=0" + "&api_key=" + APIKEY;
+        console.log("myPlate queryURL: ", queryURL);
+
+        // AJAX request with the queryURL
+        $.ajax({
+            url: queryURL,
+            method: "GET"
+        })
+            .then(function (response) {
+                // storing the data from the AJAX request in the results variable
+                var results = response;
+                // var i = 0;
+                // var foodGroup = results.list.item[i].group;
+                // var foodGroup = results.foods[0].food.desc.fg;
+                // foodGroup = foodGroup.toLowerCase();
+                // do {
+                //     i++;
+                //     // foodGroup = results.list.item[i].group;
+                foodGroup = results.foods[0].food.desc.fg;
+                foodGroup = foodGroup.toLowerCase();
+                // console.log(foodGroup);
+
+                // } while (foodGroup === "branded food products database");
+
+                console.log(foodGroup);
+                console.log(results);
+                //fruits
+                if (foodGroup === "fruits and fruit juices" || foodGroup === "legumes and legume products") {
+                    $('#myPlateImage').append('<img id="plateThing" src="./assets/images/MP_FRUITS.png" />');
+                }
+                //grains
+                else if (foodGroup === "breakfast cereal" || foodGroup === "cereal grains and pasta" || foodGroup === "nut and seed products" || foodGroup === "baked products") {
+                    $('#myPlateImage').append('<img id="plateThing" src="./assets/images/MP_GRAINS.png" />');
+                }
+                //vegetables
+                else if (foodGroup === "vegetables and vegetable products") {
+                    $('#myPlateImage').append('<img id="plateThing" src="./assets/images/MP_VEGETABLES.png" />');
+                }
+                //protein 
+                else if (foodGroup === "finfish and shellfish products" || foodGroup === "lamb, veal and game products" || foodGroup === "pork products" || foodGroup === "poultry products" || foodGroup === "sausages and luncheon meats" || foodGroup === "beef products") {
+                    $('#myPlateImage').append('<img id="plateThing" src="./assets/images/MP_PROTEIN.png" />');
+                }
+                //dairy
+                else if (foodGroup === "dairy and egg products") {
+                    $('#myPlateImage').append('<img id="plateThing" src="./assets/images/MP_DAIRY.png" />');
+                }
+                //junk
+                else if (foodGroup == "fast foods" || foodGroup == "fats and oils" || foodGroup == "snacks" || foodGroup == "sweets" || foodGroup == "soups, sauces and gravys" || foodGroup == "alaskan native and native american products" || foodGroup == "beverages" || foodGroup == "spices and herbs") {
+                    $('#myPlateImage').append('<img id="plateThing" src="./assets/images/MP_OTHER.png" />');
+                }
+                else {
+                    $('#myPlateImage').append('<img id="plateThing" src="./assets/images/MP_OTHER.png" />');
+                }
+            });
+
     };
-    buildDetailPage();
 
+    // End My Plate //
 
 
     // Refresh the Plotly.js bar chart when select box is changed
     var plotlyRefresher = function (response) {
         var simpleResults = response.foods[0].food;
-
         var xArray = [];
         var yArray = [];
-
         for (var i = 0; i < simpleResults.nutrients.length; i++) {
             var id = simpleResults.nutrients[i].nutrient_id;
             var value = simpleResults.nutrients[i].measures[measureOption].value;
-            console.log("simpleresults, ", simpleResults);
+            // console.log("simpleresults, ", simpleResults);
             if (id in nutrientNames) {
                 var nutrientTitle = nutrientNames[simpleResults.nutrients[i].nutrient_id];
-                console.log("simpleResults: ", simpleResults);
-                console.log("value: ", value);
+                // console.log("simpleResults: ", simpleResults);
+                // console.log("value: ", value);
                 xArray.push(nutrientTitle);
                 yArray.push(value);
-                console.log("x: ", xArray);
-                console.log("y: ", yArray);
+                // console.log("x: ", xArray);
+                // console.log("y: ", yArray);
             }
         };
-
         var data = [
             {
                 x: xArray,
@@ -273,7 +319,18 @@ $(document).ready(function () {
     };
 
 
-    // displayMyPLate("banana");
+    // This function builds the detail view page
+    var buildDetailPage = function () {
+        measureOption = 0;
+        NDBOID = getUrlVars()["NDBOID"];
+        foodNameString = getUrlVars()["foodNameString"];
+        console.log("foodNameString:", foodNameString);
+        giphySearchString = encodeURIComponent(foodNameString);
+        nutritionDetailAjax(NDBOID);
+        gifRequest(giphySearchString);
+        displayMyPLate(foodNameString);
+    };
+    buildDetailPage();
 
 
 });
