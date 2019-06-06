@@ -541,8 +541,9 @@ a.back:hover {
 #gifs-appear-here .topic-image {
   margin-bottom: 0;
   float: left;
-  width: 47%;
-  margin: 0 5px;
+  width: 25%;
+  margin: 0;
+  padding: 0 8px;
 }
 
 #gifs-appear-here img:hover {
@@ -551,4 +552,8 @@ a.back:hover {
 
 .nutrition-wrapper .col-6 {
   /* border: 1px solid red; */
+}
+
+img#plateThing {
+  height: auto;
 }
