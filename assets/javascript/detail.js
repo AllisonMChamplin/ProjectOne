@@ -80,17 +80,13 @@ $(document).ready(function () {
 
         // Display the nutrition data
         var nutrientTable = function () {
-            // console.log("hi nutrientTable: ");
             var tableWrapper = $('<div class="tbl">');
             var tableDiv = $('<div id="table-wrapper">');
             var reportWrapTable = $("<table class='report-wrapper'>");
             var simpleResults = response.foods[0].food;
             for (var i = 0; i < simpleResults.nutrients.length; i++) {
                 var id = simpleResults.nutrients[i].nutrient_id;
-                // console.log("id: ", id);
-                if (id in nutrientNames) {
-                    // console.log("Fix", id); 
-                    // console.log("nutrientNames ", nutrientNames[simpleResults.nutrients[i].nutrient_id]);    
+                if (id in nutrientNames) {  
                     var nutrientTitle = nutrientNames[simpleResults.nutrients[i].nutrient_id];
                     var value = simpleResults.nutrients[i].measures[measureOption];
                     var nutrientRow = $('<tr>');
@@ -162,16 +158,83 @@ $(document).ready(function () {
             }
         };
         $('.label-wrapper').append(tableWrapper);
-    }
+    };
+
+
+    // GIPHY 
+    // Ajax call to GiphyAPI
+    var gifRequest = function (giphySearchString) {
+        var APIKEY = "DPBvGpuy5v0lsWlSAd51dsjMvJ6rjWcP";
+        var queryURL = "https://api.giphy.com/v1/gifs/search?q=" +
+            giphySearchString + "&api_key=" + APIKEY + "&limit=4&rating=g";
+        $.ajax({
+            url: queryURL,
+            method: "GET"
+        })
+            .then(function (response) {
+                displayGifs(response.data);
+            });
+    };
+
+    var displayGifs = function (x) {
+        console.log("cheers");
+        console.log("x: ", x);
+    };
+
+    // Function to add GIPHYAPI ajax results array to the page
+    var displayGifs = function (x) {
+        var giphyList = x;
+        var wrapDiv = $("<div class='wrap clearfix'>");
+        for (var i = 0; i < giphyList.length; i++) {
+            var gifDiv = $("<div class='topic'>");
+            // Creating a paragraph tag with the result item's rating
+            var rating = $("<p>").text("Rating: " + giphyList[i].rating.toUpperCase());
+            rating.attr("class", "meta");
+            var topicImage = $("<img />");
+            // Setting the src attribute of the image to the fixed height still property
+            topicImage.attr("src", giphyList[i].images.fixed_height_still.url);
+            topicImage.attr("data-state", "still");
+            topicImage.attr("data-still", giphyList[i].images.fixed_height_still.url);
+            topicImage.attr("data-animate", giphyList[i].images.fixed_height.url);
+            topicImage.attr("class", "clicky");
+            // Appending the paragraph and image tag to the gifDiv
+            gifDiv.attr("class", "topic-image");
+            gifDiv.append(topicImage);
+            gifDiv.append(rating);
+            // gifDiv.append(title);
+            wrapDiv.append(gifDiv);
+        }
+        $("#gifs-appear-here").prepend(wrapDiv);
+
+    };
+
+    // Click handler to toggle between still image and animated GIFs
+    $('body').on('click', 'img', function () {
+        // Store the data state attribute
+        var state = $(this).attr("data-state");
+        // Toggle the data state on click
+        if (state === "still") {
+            $(this).attr("src", $(this).attr("data-animate"));
+            $(this).attr("data-state", "animate");
+        } else {
+            $(this).attr("src", $(this).attr("data-still"));
+            $(this).attr("data-state", "still");
+        }
+    });
+    // END GIPHY
 
 
     // This function builds the detail view page
-    var buildNutritionView = function () {
+    var buildDetailPage = function () {
         measureOption = 0;
         NDBOID = getUrlVars()["NDBOID"];
+        foodNameString = getUrlVars()["foodNameString"];
+        console.log("foodNameString:", foodNameString);
+        giphySearchString = encodeURIComponent(foodNameString);
         nutritionDetailAjax(NDBOID);
+        gifRequest(giphySearchString);
     };
-    buildNutritionView();
+    buildDetailPage();
 
 
 });
