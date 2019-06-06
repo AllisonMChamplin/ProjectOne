@@ -86,7 +86,7 @@ $(document).ready(function () {
             var simpleResults = response.foods[0].food;
             for (var i = 0; i < simpleResults.nutrients.length; i++) {
                 var id = simpleResults.nutrients[i].nutrient_id;
-                if (id in nutrientNames) {  
+                if (id in nutrientNames) {
                     var nutrientTitle = nutrientNames[simpleResults.nutrients[i].nutrient_id];
                     var value = simpleResults.nutrients[i].measures[measureOption];
                     var nutrientRow = $('<tr>');
@@ -100,6 +100,7 @@ $(document).ready(function () {
             labelWrapper.append(tableWrapper);
         };
         nutrientTable();
+        plotlyRefresher(response);
         label.append(labelWrapper);
         nutritionLabelDiv.append(label);
     };
@@ -130,6 +131,7 @@ $(document).ready(function () {
             .then(function (response) {
                 $('.tbl').empty();
                 nutrientTableRefresher(response);
+                plotlyRefresher(response);
             });
     };
 
@@ -235,6 +237,43 @@ $(document).ready(function () {
         gifRequest(giphySearchString);
     };
     buildDetailPage();
+
+
+
+    // Refresh the Plotly.js bar chart when select box is changed
+    var plotlyRefresher = function (response) {
+        var simpleResults = response.foods[0].food;
+
+        var xArray = [];
+        var yArray = [];
+
+        for (var i = 0; i < simpleResults.nutrients.length; i++) {
+            var id = simpleResults.nutrients[i].nutrient_id;
+            var value = simpleResults.nutrients[i].measures[measureOption].value;
+            console.log("simpleresults, ", simpleResults);
+            if (id in nutrientNames) {
+                var nutrientTitle = nutrientNames[simpleResults.nutrients[i].nutrient_id];
+                console.log("simpleResults: ", simpleResults);
+                console.log("value: ", value);
+                xArray.push(nutrientTitle);
+                yArray.push(value);
+                console.log("x: ", xArray);
+                console.log("y: ", yArray);
+            }
+        };
+
+        var data = [
+            {
+                x: xArray,
+                y: yArray,
+                type: 'bar'
+            }
+        ];
+        Plotly.newPlot('myDiv', data);
+    };
+
+
+    // displayMyPLate("banana");
 
 
 });
