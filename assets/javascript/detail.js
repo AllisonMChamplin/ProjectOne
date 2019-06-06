@@ -203,8 +203,8 @@ $(document).ready(function () {
             wrapDiv.append(gifDiv);
         }
         $("#gifs-appear-here").prepend(wrapDiv);
-
     };
+
 
     // Click handler to toggle between still image and animated GIFs
     $('body').on('click', 'img', function () {
@@ -221,8 +221,8 @@ $(document).ready(function () {
     });
     // END GIPHY //
 
-    // My Plate //
 
+    // My Plate //
     var displayMyPLate = function (input) {
 
         var APIKEY = "MTThsOXeyC4yDoAe048samFSx66c0bbwi0HO6m4G";
@@ -285,7 +285,6 @@ $(document).ready(function () {
             });
 
     };
-
     // End My Plate //
 
 
